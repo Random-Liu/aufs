@@ -65,7 +65,7 @@ type snapshotter struct {
 
 // New creates a new snapshotter using aufs
 func New(root string) (snapshots.Snapshotter, error) {
-	if err := supported(); err != nil {
+	if err := Supported(); err != nil {
 		return nil, errors.Wrap(plugin.ErrSkipPlugin, err.Error())
 	}
 	if err := os.MkdirAll(root, 0700); err != nil {
@@ -400,7 +400,7 @@ func (o *snapshotter) upperPath(id string) string {
 	return filepath.Join(o.root, "snapshots", id, "fs")
 }
 
-func supported() error {
+func Supported() error {
 	// modprobe the aufs module before checking
 	cmd := exec.Command("modprobe", "aufs")
 	out, err := cmd.CombinedOutput()
